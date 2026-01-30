@@ -20,33 +20,36 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 ## Testing on a real device (phone)
 
-To open the app on your phone while running locally, expose your dev server with a **public tunnel** (no dependency or config change in this repo).
+### Same network (no tunnel)
 
-1. **Start the dev server** (in this repo):
+With your phone on the same Wi‑Fi as your machine:
+
+1. **Start the dev server:**
 
    ```bash
    npm run dev
    ```
 
-   Leave it running.
+   Next.js listens on all interfaces by default, so your phone can reach it.
 
-2. **In a separate terminal**, start a tunnel to port `3000`. Use any tool you prefer; examples:
-   - **ngrok** (install from [ngrok.com](https://ngrok.com)):
-     ```bash
-     ngrok http 3000
-     ```
-   - **Cloudflare Tunnel** (`cloudflared`):
-     ```bash
-     cloudflared tunnel --url http://localhost:3000
-     ```
-   - **localtunnel** (if you have it installed):
-     ```bash
-     npx localtunnel --port 3000
-     ```
+2. **Find your machine’s local IP** (the one on your Wi‑Fi):
+   - **Windows:** `ipconfig` → use the IPv4 address (e.g. `192.168.1.x` or `169.254.x.x`).
+   - **macOS / Linux:** `ifconfig` or `ip addr` → use the inet address on your Wi‑Fi interface.
 
-3. **Open the public URL** shown by the tunnel (e.g. `https://abc123.ngrok.io`) on your phone’s browser. The app will load from your local machine.
+3. **On your phone’s browser** open: `http://<YOUR_IP>:3000` (e.g. `http://192.168.1.5:3000`).
 
-No packages are added to this project; run and install tunnel tools on your own machine as needed.
+`next.config` includes `allowedDevOrigins` for private IP ranges (`192.168.*.*`, `169.254.*.*`, `10.*.*.*`) so the dev server won’t warn or block those requests.
+
+### Public URL (tunnel)
+
+To use a public URL (e.g. ngrok) instead:
+
+1. Start the dev server as above and leave it running.
+2. In another terminal, run a tunnel to port `3000`, e.g.:
+   - **ngrok:** `ngrok http 3000`
+   - **Cloudflare:** `cloudflared tunnel --url http://localhost:3000`
+   - **localtunnel:** `npx localtunnel --port 3000`
+3. Open the URL the tool prints in your phone’s browser.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

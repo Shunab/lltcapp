@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Match html/body background to bottom nav (card color) to avoid flash/mismatch */
+html,
+body {
+  background-color: #020617 !important;
+}
+
+/* Prevent iOS input zoom: inputs need at least 16px font-size (override Tailwind) */
+input,
+select,
+textarea {
+  font-size: 16px !important;
+}
+
 /* Design tokens: semantic colors, radii, shadows, typography */
 @theme {
   /* Semantic colors */
