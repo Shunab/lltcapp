@@ -1,0 +1,17 @@
+export const courts = [
+  "Court 1",
+  "Court 2",
+  "Court 3",
+  "Court 4",
+  "Main Club",
+  "Indoor Centre",
+  "Grass Courts",
+  "Clay Courts",
+  "Hard Courts",
+  "Park Lane",
+  "Riverside",
+  "University Courts",
+  "Community Centre",
+  "Sports Complex A",
+  "Sports Complex B",
+];

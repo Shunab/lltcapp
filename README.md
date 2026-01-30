@@ -18,6 +18,36 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
+## Testing on a real device (phone)
+
+To open the app on your phone while running locally, expose your dev server with a **public tunnel** (no dependency or config change in this repo).
+
+1. **Start the dev server** (in this repo):
+
+   ```bash
+   npm run dev
+   ```
+
+   Leave it running.
+
+2. **In a separate terminal**, start a tunnel to port `3000`. Use any tool you prefer; examples:
+   - **ngrok** (install from [ngrok.com](https://ngrok.com)):
+     ```bash
+     ngrok http 3000
+     ```
+   - **Cloudflare Tunnel** (`cloudflared`):
+     ```bash
+     cloudflared tunnel --url http://localhost:3000
+     ```
+   - **localtunnel** (if you have it installed):
+     ```bash
+     npx localtunnel --port 3000
+     ```
+
+3. **Open the public URL** shown by the tunnel (e.g. `https://abc123.ngrok.io`) on your phone’s browser. The app will load from your local machine.
+
+No packages are added to this project; run and install tunnel tools on your own machine as needed.
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
