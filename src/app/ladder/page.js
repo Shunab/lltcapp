@@ -35,7 +35,6 @@ export default function LadderPage() {
               rank={player.rank}
               name={player.name}
               initials={player.initials}
-              status={player.status}
               wins={player.wins}
               losses={player.losses}
               form={player.form}

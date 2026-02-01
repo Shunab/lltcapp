@@ -47,3 +47,26 @@ export function getPlayers(mode) {
     .map((p) => ({ id: p.id, name: p.name, initials: p.initials }));
   return Promise.resolve(list);
 }
+
+/**
+ * Get doubles partnerships (teams) for a singles player id.
+ * @param {number} singlesPlayerId
+ * @returns {Promise<Array<{ id: number, name: string, rank: number, partnerId: number, partnerName: string }>>}
+ */
+export function getDoublesPartnerships(singlesPlayerId) {
+  const list = Object.values(playersData)
+    .filter((p) => p.id >= 100 && Array.isArray(p.memberIds) && p.memberIds.includes(singlesPlayerId))
+    .map((p) => {
+      const partnerId = p.memberIds.find((id) => id !== singlesPlayerId);
+      const partner = partnerId != null ? playersData[partnerId] : null;
+      return {
+        id: p.id,
+        name: p.name,
+        rank: p.rank,
+        partnerId: partnerId ?? null,
+        partnerName: partner?.name ?? "—",
+      };
+    })
+    .sort((a, b) => a.rank - b.rank);
+  return Promise.resolve(list);
+}

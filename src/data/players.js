@@ -32,6 +32,17 @@ export const playersData = {
     form: ["L", "W", "W", "L", "W"],
     rankHistory: [4, 4, 4, 3, 3, 3, 3],
   },
+  4: {
+    id: 4,
+    name: "Tom Wilson",
+    initials: "TW",
+    rank: 4,
+    wins: 8,
+    losses: 6,
+    status: "Active",
+    form: ["W", "L", "L", "W", "W"],
+    rankHistory: [6, 5, 5, 4, 4, 4, 4],
+  },
   101: {
     id: 101,
     name: "Johnson & Chen",
@@ -42,6 +53,7 @@ export const playersData = {
     status: "Active",
     form: ["W", "W", "W", "W", "L"],
     rankHistory: [2, 2, 1, 1, 1, 1, 1],
+    memberIds: [1, 2],
   },
   102: {
     id: 102,
@@ -53,5 +65,6 @@ export const playersData = {
     status: "Active",
     form: ["W", "L", "W", "W", "W"],
     rankHistory: [3, 3, 3, 2, 2, 2, 2],
+    memberIds: [3, 4],
   },
 };

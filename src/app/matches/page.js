@@ -6,25 +6,14 @@ import PageHeader from "../PageHeader";
 import { listMatches } from "../../lib/api";
 import { getSession } from "../../lib/session";
 
-export default function MatchesPage() {
-  const [matches, setMatches] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [matchMode, setMatchMode] = useState("mine");
-  const [currentUserId, setCurrentUserId] = useState(null);
+function getInitials(profile) {
+  if (!profile) return "?";
+  const f = profile.firstName?.trim()?.[0] || "";
+  const l = profile.lastName?.trim()?.[0] || "";
+  return (f + l).toUpperCase() || "?";
+}
 
-  useEffect(() => {
-    getSession().then((s) => {
-      setCurrentUserId(s?.sessionUserId ?? null);
-    });
-  }, []);
-
-  useEffect(() => {
-    listMatches().then((list) => {
-      setMatches(list);
-      setLoading(false);
-    });
-  }, []);
-
+function MatchCard({ match, youInitials }) {
   const formatDate = (dateStr) => {
     try {
       const d = new Date(dateStr);
@@ -47,6 +36,71 @@ export default function MatchesPage() {
       })
       .join(", ");
   };
+
+  const youLabel = match.mode === "doubles" && match.partnerName
+    ? `You & ${match.partnerName}`
+    : "You";
+  const themLabel = match.opponent2Name
+    ? `${match.opponentName} & ${match.opponent2Name}`
+    : match.opponentName;
+
+  return (
+    <Link
+      href={`/matches/${match.id}`}
+      className="block px-4 py-4 transition-colors hover:bg-card-elevated active:bg-card"
+    >
+      <div className="grid grid-cols-[80px_1fr_80px] items-center gap-3">
+        <div className="flex flex-col items-center gap-0.5">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold uppercase text-primary-text">
+            {youInitials}
+          </div>
+          <span className="w-full truncate text-center text-xs text-muted">
+            {youLabel}
+          </span>
+        </div>
+        <div className="min-w-0 overflow-hidden text-center">
+          <p className="truncate text-lg font-semibold tabular-nums text-text">
+            {formatScore(match.sets)}
+          </p>
+          <p className="mt-0.5 truncate text-xs text-muted">
+            {formatDate(match.date)}
+            {match.location ? ` · ${match.location}` : ""}
+          </p>
+        </div>
+        <div className="flex flex-col items-center gap-0.5">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-border bg-card-elevated text-sm font-semibold uppercase text-text">
+            {match.opponentName?.trim()?.[0]?.toUpperCase() ?? "?"}
+          </div>
+          <span className="w-full truncate text-center text-xs text-muted">
+            {themLabel}
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+export default function MatchesPage() {
+  const [matches, setMatches] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [matchMode, setMatchMode] = useState("mine");
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [youInitials, setYouInitials] = useState("?");
+
+  useEffect(() => {
+    getSession().then((s) => {
+      setCurrentUserId(s?.sessionUserId ?? null);
+      const p = s?.currentUserProfile;
+      setYouInitials(getInitials(p));
+    });
+  }, []);
+
+  useEffect(() => {
+    listMatches().then((list) => {
+      setMatches(list);
+      setLoading(false);
+    });
+  }, []);
 
   const filteredMatches =
     matchMode === "mine" && currentUserId
@@ -76,27 +130,11 @@ export default function MatchesPage() {
         ) : (
           <div className="divide-y divide-border-subtle">
             {filteredMatches.map((match) => (
-              <Link
+              <MatchCard
                 key={match.id}
-                href={`/matches/${match.id}`}
-                className="block px-4 py-3 transition-colors hover:bg-card-elevated active:bg-card"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="min-w-0 flex-1">
-                    <p className="min-w-0 break-words text-sm font-medium text-text">
-                      vs {match.opponentName}
-                      {match.opponent2Name ? ` / ${match.opponent2Name}` : ""}
-                    </p>
-                    <p className="mt-1 text-xs text-muted">
-                      {formatDate(match.date)} · {match.matchType}
-                      {match.mode ? ` · ${match.mode}` : ""}
-                    </p>
-                  </div>
-                  <div className="shrink-0 text-right text-xs text-muted">
-                    {formatScore(match.sets)}
-                  </div>
-                </div>
-              </Link>
+                match={match}
+                youInitials={youInitials}
+              />
             ))}
           </div>
         )}

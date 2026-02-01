@@ -97,10 +97,8 @@ export default function MatchDetailPage({ params }) {
           </Card>
 
           <Card>
-            <p className="text-xs font-medium text-muted">Type · Format</p>
-            <p className="mt-1 text-sm text-text">
-              {match.matchType} · {match.mode || "—"}
-            </p>
+            <p className="text-xs font-medium text-muted">Format</p>
+            <p className="mt-1 text-sm text-text">{match.mode || "—"}</p>
           </Card>
 
           <Card>
@@ -108,10 +106,22 @@ export default function MatchDetailPage({ params }) {
             <p className="mt-1 text-sm text-text">{formatScore(match.sets)}</p>
           </Card>
 
-          {match.retired && (
+          {(match.retired || match.outcomeOverride) && (
             <Card>
-              <p className="text-xs font-medium text-muted">Retirement</p>
-              <p className="mt-1 text-sm text-text">Match ended by retirement</p>
+              <p className="text-xs font-medium text-muted">Outcome</p>
+              <p className="mt-1 text-sm text-text">
+                {match.outcomeOverride === "player_a_retired"
+                  ? "Player A retired"
+                  : match.outcomeOverride === "player_b_retired"
+                    ? "Player B retired"
+                    : match.outcomeOverride === "draw"
+                      ? "Draw"
+                      : match.outcomeOverride === "cancelled"
+                        ? "Match cancelled"
+                        : match.retired
+                          ? "Match ended by retirement"
+                          : "—"}
+              </p>
             </Card>
           )}
 

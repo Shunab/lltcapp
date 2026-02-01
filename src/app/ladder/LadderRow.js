@@ -5,16 +5,10 @@ export default function LadderRow({
   rank,
   name,
   initials,
-  status,
   wins,
   losses,
   form,
 }) {
-  const statusClasses =
-    status === "Active"
-      ? "border-success/40 bg-success-muted text-success"
-      : "border-border bg-card-elevated text-muted";
-
   const formClasses = (result) =>
     result === "W"
       ? "bg-success text-primary-text"
@@ -40,16 +34,9 @@ export default function LadderRow({
 
         {/* Name + record */}
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <p className="min-w-0 break-words text-sm font-semibold text-text">
-              {name}
-            </p>
-            <span
-              className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] ${statusClasses}`}
-            >
-              {status}
-            </span>
-          </div>
+          <p className="min-w-0 break-words text-sm font-semibold text-text">
+            {name}
+          </p>
           <p className="mt-1 text-xs text-muted">
             {wins}W &mdash; {losses}L
           </p>
