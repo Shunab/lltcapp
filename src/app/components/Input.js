@@ -22,10 +22,10 @@ export default function Input({
         id={id}
         type={type}
         className={`
-          w-full rounded-lg border bg-card px-4 py-3 text-sm text-text
+          w-full rounded-xl border bg-card px-4 py-3 text-sm text-text
           placeholder:text-muted
-          focus:border-primary focus:outline-none
-          disabled:opacity-50
+          focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
+          disabled:opacity-50 transition-colors duration-200
           ${error ? "border-danger" : "border-border"}
           ${className}
         `}

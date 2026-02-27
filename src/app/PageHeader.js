@@ -11,19 +11,19 @@ export default function PageHeader({
 }) {
   if (page === "ladder") {
     return (
-      <div className="sticky top-0 z-10 border-b border-border-subtle bg-card/95 px-4 pb-3 pt-4 backdrop-blur">
-        <h1 className="mb-3 text-xl font-semibold text-text">
+      <div className="sticky top-0 z-10 border-b border-border-subtle bg-card/95 px-4 pb-3 pt-4 backdrop-blur-md">
+        <h1 className="mb-3 text-xl font-bold tracking-tight text-text">
           {title ?? "Ladder"}
         </h1>
 
-        <div className="flex rounded-full bg-card p-1 text-xs font-medium text-muted">
+        <div className="flex rounded-xl bg-card p-1 text-xs font-medium text-muted">
           <button
             type="button"
             onClick={() => onChangeMode?.("singles")}
-            className={`flex-1 rounded-full px-3 py-1.5 transition-colors ${
+            className={`flex-1 rounded-lg px-3 py-2 transition-all duration-200 ${
               mode === "singles"
-                ? "bg-text text-background"
-                : "text-muted"
+                ? "bg-primary text-primary-text"
+                : "hover:text-text"
             }`}
           >
             Singles
@@ -31,10 +31,10 @@ export default function PageHeader({
           <button
             type="button"
             onClick={() => onChangeMode?.("doubles")}
-            className={`flex-1 rounded-full px-3 py-1.5 transition-colors ${
+            className={`flex-1 rounded-lg px-3 py-2 transition-all duration-200 ${
               mode === "doubles"
-                ? "bg-text text-background"
-                : "text-muted"
+                ? "bg-primary text-primary-text"
+                : "hover:text-text"
             }`}
           >
             Doubles
@@ -46,19 +46,19 @@ export default function PageHeader({
 
   if (page === "matches") {
     return (
-      <div className="sticky top-0 z-10 border-b border-border-subtle bg-card/95 px-4 pb-3 pt-4 backdrop-blur">
-        <h1 className="mb-3 text-xl font-semibold text-text">
+      <div className="sticky top-0 z-10 border-b border-border-subtle bg-card/95 px-4 pb-3 pt-4 backdrop-blur-md">
+        <h1 className="mb-3 text-xl font-bold tracking-tight text-text">
           {title ?? "Matches"}
         </h1>
 
-        <div className="flex rounded-full bg-card p-1 text-xs font-medium text-muted">
+        <div className="flex rounded-xl bg-card p-1 text-xs font-medium text-muted">
           <button
             type="button"
             onClick={() => onChangeMode?.("mine")}
-            className={`flex-1 rounded-full px-3 py-1.5 transition-colors ${
+            className={`flex-1 rounded-lg px-3 py-2 transition-all duration-200 ${
               mode === "mine"
-                ? "bg-text text-background"
-                : "text-muted"
+                ? "bg-primary text-primary-text"
+                : "hover:text-text"
             }`}
           >
             My Matches
@@ -66,10 +66,10 @@ export default function PageHeader({
           <button
             type="button"
             onClick={() => onChangeMode?.("all")}
-            className={`flex-1 rounded-full px-3 py-1.5 transition-colors ${
+            className={`flex-1 rounded-lg px-3 py-2 transition-all duration-200 ${
               mode === "all"
-                ? "bg-text text-background"
-                : "text-muted"
+                ? "bg-primary text-primary-text"
+                : "hover:text-text"
             }`}
           >
             All Matches
@@ -81,13 +81,13 @@ export default function PageHeader({
 
   if (title) {
     return (
-      <div className="sticky top-0 z-10 border-b border-border-subtle bg-card/95 px-4 py-3 backdrop-blur">
+      <div className="sticky top-0 z-10 border-b border-border-subtle bg-card/95 px-4 py-3 backdrop-blur-md">
         <div className="flex min-w-0 items-center gap-2">
           {showBack && (
             <button
               type="button"
               onClick={onBack}
-              className="flex shrink-0 items-center justify-center rounded-full p-1.5 text-muted transition-colors hover:bg-card hover:text-text active:opacity-80"
+              className="flex shrink-0 items-center justify-center rounded-xl p-2 text-muted transition-all duration-200 hover:bg-card-elevated hover:text-text active:opacity-80"
               aria-label="Back"
             >
               <svg

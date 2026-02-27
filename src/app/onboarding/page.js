@@ -36,6 +36,7 @@ export default function OnboardingPage() {
   const [backhand, setBackhand] = useState("");
   const [ltaNumber, setLtaNumber] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+  const [instagram, setInstagram] = useState("");
 
   // Step 3
   const [courtSearch, setCourtSearch] = useState("");
@@ -107,6 +108,7 @@ export default function OnboardingPage() {
         backhand,
         ltaNumber: ltaNumber.trim() || null,
         whatsapp: whatsapp.trim() || null,
+        instagram: instagram.trim() || null,
         preferredCourts: selectedCourts,
         availability,
         returnDate: showReturnDate ? returnDate.trim() || null : null,
@@ -271,6 +273,13 @@ export default function OnboardingPage() {
                 value={whatsapp}
                 onChange={(e) => setWhatsapp(e.target.value)}
                 placeholder="Phone or link"
+              />
+              <Input
+                id="instagram"
+                label="Instagram (optional)"
+                value={instagram}
+                onChange={(e) => setInstagram(e.target.value)}
+                placeholder="Username (e.g. @username or username)"
               />
             </>
           )}

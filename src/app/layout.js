@@ -1,19 +1,8 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AppShellWrapper from "./AppShellWrapper";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-// Bottom nav / card background for theme and status bar
-const themeColor = "#020617";
+/* Theme: club primary #3A2E68, dark UI */
+const themeColor = "#0c0a14";
 
 export const metadata = {
   title: "LLTC Ladder",
@@ -37,10 +26,13 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="h-full">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full overflow-hidden overflow-x-hidden bg-background text-text`}
-      >
+    <html lang="en" className="h-full" suppressHydrationWarning>
+      <body className="font-sans antialiased h-full overflow-hidden overflow-x-hidden bg-background text-text">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var k='tennisLadderTheme';var v=localStorage.getItem(k)||'dark';var ok=['dark','light','dark-warm','light-cool'];if(ok.indexOf(v)===-1)v='dark';document.documentElement.setAttribute('data-theme',v);})();`,
+          }}
+        />
         <AppShellWrapper>{children}</AppShellWrapper>
       </body>
     </html>

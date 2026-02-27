@@ -1,8 +1,10 @@
+import { getAllUsers, addUser, claimPreCreatedAccount } from "./userStore";
+
 const SESSION_KEY = "tennisLadderSession";
 
 /**
  * Get full session from localStorage.
- * @returns {Promise<{ sessionUserId: string | null, onboarded: boolean, currentUserProfile: object | null }>}
+ * @returns {Promise<{ sessionUserId: string | null, onboarded: boolean, currentUserProfile: object | null, emailOrPhone: string | null }>}
  */
 export function getSession() {
   if (typeof window === "undefined") {
@@ -10,6 +12,7 @@ export function getSession() {
       sessionUserId: null,
       onboarded: false,
       currentUserProfile: null,
+      emailOrPhone: null,
     });
   }
   try {
@@ -19,6 +22,7 @@ export function getSession() {
         sessionUserId: null,
         onboarded: false,
         currentUserProfile: null,
+        emailOrPhone: null,
       });
     }
     const data = JSON.parse(raw);
@@ -26,18 +30,21 @@ export function getSession() {
       sessionUserId: data.sessionUserId ?? null,
       onboarded: Boolean(data.onboarded),
       currentUserProfile: data.currentUserProfile ?? null,
+      emailOrPhone: data.emailOrPhone ?? null,
     });
   } catch {
     return Promise.resolve({
       sessionUserId: null,
       onboarded: false,
       currentUserProfile: null,
+      emailOrPhone: null,
     });
   }
 }
 
 /**
  * Login with email/phone and password. Mock: accepts any non-empty credentials.
+ * If a user with this emailOrPhone exists in user store, restores their profile and onboarded state.
  * @param {string} emailOrPhone
  * @param {string} password
  * @returns {Promise<{ sessionUserId: string, onboarded: boolean } | { error: string }>}
@@ -53,21 +60,35 @@ export function login(emailOrPhone, password) {
   if (!(password || "").trim()) {
     return Promise.resolve({ error: "Password is required" });
   }
-  const sessionUserId = `user-${Date.now()}`;
-  const session = {
-    sessionUserId,
-    onboarded: false,
-    currentUserProfile: null,
-  };
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  return Promise.resolve({
-    sessionUserId,
-    onboarded: false,
+  return getAllUsers().then((users) => {
+    const key = trimmed.toLowerCase();
+    const existing = users.find(
+      (u) => (u.emailOrPhone || "").trim().toLowerCase() === key
+    );
+    const sessionUserId = existing?.userId ?? `user-${Date.now()}`;
+    const session = existing
+      ? {
+          sessionUserId,
+          onboarded: true,
+          currentUserProfile: existing.profile ?? null,
+          emailOrPhone: trimmed,
+        }
+      : {
+          sessionUserId,
+          onboarded: false,
+          currentUserProfile: null,
+          emailOrPhone: trimmed,
+        };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    return {
+      sessionUserId,
+      onboarded: Boolean(session.onboarded),
+    };
   });
 }
 
 /**
- * Signup with form. Mock: creates session with onboarded=false.
+ * Signup with form. If emailOrPhone matches a pre-created account (admin), claims it and sets onboarded.
  * @param {{ name: string, emailOrPhone: string, password: string }} form
  * @returns {Promise<{ sessionUserId: string, onboarded: boolean } | { error: string }>}
  */
@@ -84,16 +105,29 @@ export function signup(form) {
   if (!password) {
     return Promise.resolve({ error: "Password is required" });
   }
-  const sessionUserId = `user-${Date.now()}`;
-  const session = {
-    sessionUserId,
-    onboarded: false,
-    currentUserProfile: null,
-  };
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  return Promise.resolve({
-    sessionUserId,
-    onboarded: false,
+  return claimPreCreatedAccount(emailOrPhone).then((claimedProfile) => {
+    const sessionUserId = `user-${Date.now()}`;
+    const session = {
+      sessionUserId,
+      onboarded: Boolean(claimedProfile),
+      currentUserProfile: claimedProfile || null,
+      emailOrPhone,
+    };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    if (claimedProfile) {
+      return addUser({
+        userId: sessionUserId,
+        emailOrPhone,
+        profile: claimedProfile,
+      }).then(() => ({
+        sessionUserId,
+        onboarded: true,
+      }));
+    }
+    return Promise.resolve({
+      sessionUserId,
+      onboarded: false,
+    });
   });
 }
 
@@ -121,7 +155,7 @@ export function getCurrentUser() {
 }
 
 /**
- * Save onboarding profile and set onboarded=true.
+ * Save onboarding profile and set onboarded=true. Also registers user in user store.
  * @param {object} profileData
  * @returns {Promise<void>}
  */
@@ -133,6 +167,14 @@ export function setOnboarded(profileData) {
     session.onboarded = true;
     session.currentUserProfile = profileData || null;
     localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    const emailOrPhone = session.emailOrPhone || "";
+    if (session.sessionUserId && emailOrPhone) {
+      return addUser({
+        userId: session.sessionUserId,
+        emailOrPhone,
+        profile: profileData || {},
+      });
+    }
     return Promise.resolve();
   } catch {
     return Promise.resolve();

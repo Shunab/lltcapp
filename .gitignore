@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# backend (separate clone from Bitbucket – pull/push from api/ when working with backend)
+/api
+
 # dependencies
 /node_modules
 /.pnp

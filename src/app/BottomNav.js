@@ -88,8 +88,8 @@ export default function BottomNav() {
   const isActive = (href) => pathname === href;
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border-subtle bg-card/95 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] backdrop-blur">
-      <div className="mx-auto flex max-w-md items-stretch justify-between px-2">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border-subtle bg-card/95 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] backdrop-blur-md">
+      <div className="mx-auto flex max-w-md items-stretch justify-between gap-1 px-3">
         {navItems.map((item) => {
           const active = isActive(item.href);
           const Icon = item.icon;
@@ -97,9 +97,9 @@ export default function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-xs font-medium transition-colors ${
+              className={`flex flex-1 flex-col items-center justify-center gap-1 rounded-xl py-2.5 text-xs font-medium transition-all duration-200 ${
                 active
-                  ? "bg-primary/15 text-primary"
+                  ? "bg-primary/20 text-primary"
                   : "text-muted hover:bg-card-elevated hover:text-text"
               }`}
             >

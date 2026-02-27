@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getSession, signup } from "../../lib/session";
@@ -54,7 +55,7 @@ export default function SignupPage() {
           setError(result.error);
           return;
         }
-        router.replace("/onboarding");
+        router.replace(result.onboarded ? "/ladder" : "/onboarding");
       }
     );
   };
@@ -68,16 +69,19 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="flex min-h-dvh flex-col bg-background px-4 pt-[env(safe-area-inset-top)] pb-8">
-      <div className="mx-auto w-full max-w-sm flex-1 pt-12">
-        <h1 className="text-2xl font-bold text-text">Create account</h1>
-        <p className="mt-2 text-sm text-muted">
+    <div className="flex min-h-dvh flex-col bg-background px-5 pt-[env(safe-area-inset-top)] pb-8">
+      <div className="mx-auto w-full max-w-sm flex-1 pt-8">
+        <Link href="/" className="mb-6 inline-block">
+          <Image src="/logo.png" alt="LLTC" width={80} height={80} className="h-16 w-auto object-contain" />
+        </Link>
+        <h1 className="text-2xl font-bold tracking-tight text-text">Create account</h1>
+        <p className="mt-1.5 text-sm text-muted">
           Sign up to join the ladder and record matches.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           {error && (
-            <div className="rounded-lg border border-danger/50 bg-danger-muted px-4 py-3 text-sm text-danger">
+            <div className="rounded-xl border border-danger/50 bg-danger-muted px-4 py-3 text-sm text-danger">
               {error}
             </div>
           )}
@@ -128,11 +132,14 @@ export default function SignupPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-muted">
+        <p className="mt-8 text-center text-sm text-muted">
           Already have an account?{" "}
-          <Link href="/login" className="text-primary hover:underline">
+          <Link href="/login" className="text-primary font-medium hover:underline">
             Log in
           </Link>
+        </p>
+        <p className="mt-2 text-center text-sm">
+          <Link href="/" className="text-muted hover:text-text">Back to home</Link>
         </p>
       </div>
     </div>

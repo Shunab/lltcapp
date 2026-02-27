@@ -8,7 +8,7 @@ export default function Card({
   return (
     <div
       className={`
-        rounded-lg border border-border-subtle bg-card-elevated
+        rounded-xl border border-border-subtle bg-card-elevated shadow-sm
         ${padding ? "p-4" : ""}
         ${className}
       `}
